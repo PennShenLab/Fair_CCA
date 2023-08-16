@@ -23,6 +23,7 @@ function [U, V, r] = single_cca(X_lt, Y_lt, X, Y, K, varargin)
     % max_iter - maximum iteration for the optimization
     % tol1 - error tolerance of lower level optimization, default: 1e-6
     % tol2 - error tolerance of upper level optimization, default: 1e-6
+    % phi - penalty function, default: abs()
 
     % Output:
     % U - canonical weight of dimensions M1xk
@@ -42,6 +43,7 @@ function [U, V, r] = single_cca(X_lt, Y_lt, X, Y, K, varargin)
     argin.addParameter('rho', 1, @isnumeric);
     argin.addParameter('type', 'ret');
     argin.addParameter('typeG', 'off');
+    argin.addParameter('phi', 'abs');
 
     argin.addParameter('max_iter', 1e2, @isnumeric);
     argin.addParameter('tol1', 1e-6, @isnumeric);
@@ -54,6 +56,7 @@ function [U, V, r] = single_cca(X_lt, Y_lt, X, Y, K, varargin)
     rho = argin.Results.rho;
     type = argin.Results.type;
     typeG = argin.Results.typeG;
+    phi = argin.Results.phi;
     
     max_iter = argin.Results.max_iter;
     tol1 = argin.Results.tol1;
@@ -92,7 +95,7 @@ function [U, V, r] = single_cca(X_lt, Y_lt, X, Y, K, varargin)
             lr = lr/sqrt(t);
         end
  
-        grad1 = multi_obj_grad(X_lt, Y_lt, X, Y, U_lt, V_lt, U, V);
+        grad1 = multi_obj_grad(X_lt, Y_lt, X, Y, U_lt, V_lt, U, V, 'phi', phi);
         dU = grad1{1};
         for i = 1:group_num
             dU = dU + rho*grad1{i};
@@ -104,7 +107,7 @@ function [U, V, r] = single_cca(X_lt, Y_lt, X, Y, K, varargin)
             dU = - G_opt;
         end
 
-        grad2 = multi_obj_grad(Y_lt, X_lt, Y, X, V_lt, U_lt, V, U);
+        grad2 = multi_obj_grad(Y_lt, X_lt, Y, X, V_lt, U_lt, V, U, 'phi', phi);
         dV = grad2{1};
         for i = 1:group_num
             dV = dV + rho*grad2{i};

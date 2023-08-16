@@ -15,6 +15,7 @@ function [U, V, r] = multi_cca(X_lt, Y_lt, X, Y, K, varargin)
     % tol1 - error tolerance of lower level optimization, default: 1e-6
     % tol2 - error tolerance of upper level optimization, default: 1e-6
     % type - retraction type
+    % phi - penalty function, default: abs()
 
     % Output:
     % U - canonical weight of dimensions M1xk
@@ -37,6 +38,7 @@ function [U, V, r] = multi_cca(X_lt, Y_lt, X, Y, K, varargin)
     argin.addParameter('tol1', 1e-6, @isnumeric);
     argin.addParameter('tol2', 1e-6, @isnumeric);
     argin.addParameter('type', 'ret');
+    argin.addParameter('phi', 'abs');
 
     argin.parse(X_lt, Y_lt, X, Y, K, varargin{:});
     max_iter = argin.Results.max_iter;
@@ -44,6 +46,7 @@ function [U, V, r] = multi_cca(X_lt, Y_lt, X, Y, K, varargin)
     lr = argin.Results.lr;
     lr_control = argin.Results.lr_control;
     type = argin.Results.type;
+    phi = argin.Results.phi;
 
     rho = argin.Results.rho;
     tol1 = argin.Results.tol1;
@@ -86,10 +89,10 @@ function [U, V, r] = multi_cca(X_lt, Y_lt, X, Y, K, varargin)
         % Optimize U
         l_init = rand(group_num + 1, 1);
         [l_u, ~] = fminimax(@(lambda) objective_function( ...
-            X_lt, Y_lt, X, Y, U_lt, V_lt, U, V, alpha, rho, lambda), ...
+            X_lt, Y_lt, X, Y, U_lt, V_lt, U, V, alpha, rho, lambda, 'phi', phi), ...
             l_init, [], [], [], [], [], [], @unitdisk, options);
         D_u = zeros(size(X, 2), K);
-        grd_terms = multi_obj_grad(X_lt, Y_lt, X, Y, U_lt, V_lt, U, V);
+        grd_terms = multi_obj_grad(X_lt, Y_lt, X, Y, U_lt, V_lt, U, V, 'phi', phi);
         for i = 1:group_num+1
             D_u = D_u + l_u(i)*grd_terms{i};
         end
@@ -97,10 +100,10 @@ function [U, V, r] = multi_cca(X_lt, Y_lt, X, Y, K, varargin)
         % Optimize V
         l_init = rand(group_num + 1, 1);
         [l_v, ~] = fminimax(@(lambda) objective_function( ...
-            Y_lt, X_lt, Y, X, V_lt, U_lt, V, U, alpha, rho, lambda), ...
+            Y_lt, X_lt, Y, X, V_lt, U_lt, V, U, alpha, rho, lambda, 'phi', phi), ...
             l_init, [], [], [], [], [], [], @unitdisk, options);
         D_v = zeros(size(Y, 2), K);
-        grd_terms = multi_obj_grad(Y_lt, X_lt, Y, X, V_lt, U_lt, V, U);
+        grd_terms = multi_obj_grad(Y_lt, X_lt, Y, X, V_lt, U_lt, V, U, 'phi', phi);
         for i = 1:group_num+1
             D_v = D_v + l_v(i)*grd_terms{i};
         end
