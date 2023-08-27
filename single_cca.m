@@ -97,7 +97,7 @@ function [U, V, r] = single_cca(X_lt, Y_lt, X, Y, K, varargin)
  
         grad1 = multi_obj_grad(X_lt, Y_lt, X, Y, U_lt, V_lt, U, V, 'phi', phi);
         dU = grad1{1};
-        for i = 1:group_num
+        for i = 2:group_num+1
             dU = dU + rho*grad1{i};
         end
         if strcmpi(typeG, 'fmincon')
@@ -109,7 +109,7 @@ function [U, V, r] = single_cca(X_lt, Y_lt, X, Y, K, varargin)
 
         grad2 = multi_obj_grad(Y_lt, X_lt, Y, X, V_lt, U_lt, V, U, 'phi', phi);
         dV = grad2{1};
-        for i = 1:group_num
+        for i = 2:group_num+1
             dV = dV + rho*grad2{i};
         end
         if strcmpi(typeG, 'fmincon')
