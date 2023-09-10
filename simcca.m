@@ -51,24 +51,16 @@ d = size(V, 2);
 [Qy, Ry] = qr(W, 0);
 
 % Construct the joint covariance matrix
-%Tx = randn(px, px);
-%Tx = eye(px);
-%TxQx = Tx * Qx;
-%Ty = randn(py, py);
-%Ty = eye(py);
-%TyQy = Ty * Qy;
+Tx = randn(px, px);
+TxQx = Tx * Qx;
+Ty = randn(py, py);
+TyQy = Ty * Qy;
 Cxx = Qx / Rx';
 Cyy = Qy / Ry';
 Cxy = bsxfun(@times, Cxx, reshape(rho, 1, d)) * Cyy';
-Cxx = Cxx * Cxx' + noisex * (eye(px) - Qx*Qx');
-Cyy = Cyy * Cyy' + noisey * (eye(py) - Qy*Qy');
-%Cxx = Cxx * Cxx' + noisex * (Tx * Tx' - TxQx * TxQx');
-%Cyy = Cyy * Cyy' + noisey * (Ty * Ty' - TyQy * TyQy');
+Cxx = Cxx * Cxx' + noisex * (Tx * Tx' - TxQx * TxQx');
+Cyy = Cyy * Cyy' + noisey * (Ty * Ty' - TyQy * TyQy');
 C = [Cxx Cxy; Cxy' Cyy];
-
-% A = [zeros(size(Cxx)) Cxy; Cxy' zeros(size(Cyy))];
-% B = [Cxx zeros(size(Cxy)); zeros(size(Cxy')) Cyy];
-% display(eigs(A, B, 6));
 
 % simulate random normal deviates
 RV = mvnrnd([mux' muy'], C, n);
