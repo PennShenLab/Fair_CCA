@@ -146,7 +146,7 @@ noisey = argin.Results.noisey;
 % retrieve dimension
 px = size(V, 1);
 py = size(W, 1);
-d = size(V, 2);
+r = size(V, 2);
 
 % "Economy Size" QR decomposition
 [Qx, Rx] = qr(V, 0);
@@ -159,7 +159,7 @@ Ty = randn(py, py);
 TyQy = Ty * Qy;
 Cxx = Qx / Rx';
 Cyy = Qy / Ry';
-Cxy = bsxfun(@times, Cxx, reshape(rho, 1, d)) * Cyy';
+Cxy = bsxfun(@times, Cxx, reshape(rho, 1, r)) * Cyy';
 Cxx = Cxx * Cxx' + noisex * (Tx * Tx' - TxQx * TxQx');
 Cyy = Cyy * Cyy' + noisey * (Ty * Ty' - TyQy * TyQy');
 C = [Cxx Cxy; Cxy' Cyy];
