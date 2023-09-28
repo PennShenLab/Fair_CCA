@@ -1,6 +1,6 @@
 ## Fair Canonical Correlation Analysis
 
-This repository holds the official code for the paper Fair Canonical Correlation Analysis.
+This repository holds the official code for the paper [Fair Canonical Correlation Analysis](https://arxiv.org/abs/2309.15809). 
 
 ### 🎯 Abstract
 This work investigates fairness and bias in Canonical Correlation Analysis (CCA), a widely used statistical technique for examining the relationship between two sets of variables. We present a framework that alleviates unfairness by minimizing the correlation disparity error associated with protected attributes. Our approach enables the CCA model to learn global projection matrices from all data points while ensuring that these matrices yield comparable correlation levels to group-specific projection matrices. Experimental evaluation on both synthetic and real-world datasets demonstrates the efficacy of our method in reducing unfairness without compromising CCA model accuracy. These findings emphasize the importance of considering fairness in CCA applications to real-world problems.
