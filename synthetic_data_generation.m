@@ -69,9 +69,6 @@ V3(57, 1) = 1.2;
 V3(57, 4) = 0.9;
 V3(61, 5) = 0.3;
 
-mux = zeros(size(U, 1), 1)
-muy = zeros(size(V, 1), 1)
-
 % simulate joint normal random deviates
 s = RandStream('mt19937ar','Seed',1);
 RandStream.setGlobalStream(s);
@@ -79,15 +76,15 @@ g = 3;
 
 n1 = 1000;
 rho1 = [0.95; 0.9; 0.85; 0.7; 0.5];
-[X1, Y1] = simcca(U1, V1, rho1, n1, 'noisex', 1, 'noisey', 1e-1, 'mux', mux, 'muy', muy);
+[X1, Y1] = simcca(U1, V1, rho1, n1, 'noisex', 1, 'noisey', 1e-1);
 
 n2 = 150;
 rho2 = [0.8; 0.77; 0.75; 0.7; 0.6];
-[X2, Y2] = simcca(U2, V2, rho1, n2, 'noisex', 1, 'noisey', 1e-1, 'mux', mux, 'muy', muy);
+[X2, Y2] = simcca(U2, V2, rho1, n2, 'noisex', 1, 'noisey', 1e-1);
 
 n3 = 200;
 rho3 = [0.7; 0.68; 0.65; 0.62; 0.59];
-[X3, Y3] = simcca(U3, V3, rho1, n3, 'noisex', 1, 'noisey', 1e-1, 'mux', mux, 'muy', muy);
+[X3, Y3] = simcca(U3, V3, rho1, n3, 'noisex', 1, 'noisey', 1e-1);
 
 X_lt = cell(g, 1);
 Y_lt = cell(g, 1);
